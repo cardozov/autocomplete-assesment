@@ -1,39 +1,34 @@
-# this makefile uses npm because it's available on node-based environments
-# it prevents additional installations, such as yarn or pnpm
-# this is optimal for CI/CD pipelines and docker containers
+# Define variables
+IMAGE_NAME := deel-autocomplete-assessment
 
 # Default command when only 'make' is executed
-all: install
+all: dev
 
-# Install dependencies
-install:
-	echo "Installing dependencies..."
-	npm install
-
-# Start development server
-dev: install
-	echo "Starting development server..."
-	npm run dev
-
-# Build project for production
+# Build the Docker image
 build:
-	echo "Building project for production..."
-	npm run build
+	docker build -t $(IMAGE_NAME) .
 
-# Serve production build
-serve:
-	echo "Serving production build..."
-	npm run serve
+# Start the application using Docker Compose in development mode
+dev:
+	docker-compose -f docker-compose.local.yaml up -d --build
 
-# Run tests
-test:
-	echo "Running tests..."
-	npm run test
+# Start the application using Docker Compose
+up:
+	docker-compose up -d --build
 
-# Clean build directory
+# Stop the application using Docker Compose
+down:
+	docker-compose down
+
+# Remove the Docker image
 clean:
-	echo "Cleaning build directory..."
-	rm -rf dist
+	docker rmi $(IMAGE_NAME)
 
-# Phony commands
-.PHONY: install dev build serve test clean
+# Rebuild the Docker image
+rebuild: clean build
+
+# Access container shell
+shell:
+	docker exec -it $(IMAGE_NAME) /bin/sh
+
+.PHONY: build up down clean rebuild shell
