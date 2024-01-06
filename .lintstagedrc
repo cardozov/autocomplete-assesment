@@ -1,0 +1,5 @@
+"*.{js,jsx,ts,tsx}":
+  - eslint --fix
+  - prettier --write
+"*.md": prettier --list-different
+"*.{css,scss,sass}": stylelint --fix

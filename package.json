@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test": "echo 'Tests not implemented yet.'",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -34,6 +36,9 @@
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
+    "stylelint": "^16.1.0",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-order": "^6.0.4",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
@@ -41,18 +46,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "echo 'Linting files'",
-      "eslint --fix",
-      "prettier --write",
-      "git add"
-    ]
   }
 }

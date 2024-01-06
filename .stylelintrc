@@ -1,0 +1,11 @@
+extends: stylelint-config-standard
+plugins: stylelint-order
+rules:
+  color-hex-length: short
+  color-no-invalid-hex: true
+  unit-allowed-list: ["em", "rem", "%", "s", "px"]
+  selector-pseudo-element-colon-notation: double
+  property-no-unknown: true
+  selector-pseudo-class-no-unknown: true
+  selector-pseudo-element-no-unknown: true
+  selector-type-no-unknown: true
