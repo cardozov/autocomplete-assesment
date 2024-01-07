@@ -9,12 +9,13 @@ build:
 	docker build -t $(IMAGE_NAME) .
 
 # Start the application using Docker Compose in development mode
-dev:
-	docker-compose -f docker-compose.local.yaml up -d --build
+dev: build
+	docker-compose -f docker-compose.local.yaml up -d && \
+  echo $(shell docker ps -aqf "name=$(IMAGE_NAME)")
 
 # Start the application using Docker Compose
-up:
-	docker-compose up -d --build
+up: build
+	docker-compose up -d
 
 # Stop the application using Docker Compose
 down:
