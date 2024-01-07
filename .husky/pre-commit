@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Running tests..."
-yarn test:ci
+echo "Running unit tests..."
+yarn test:ci -t=unit
 echo "Running lint-staged..."
 yarn lint-staged

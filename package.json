@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage",
+    "test": "vitest --ui",
+    "test:coverage": "vitest --coverage --ui",
     "test:ci": "vitest -w=false",
     "test:coverage:ci": "vitest --coverage -w=false",
     "build": "tsc && vite build",
@@ -33,6 +33,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-istanbul": "^1.1.3",
     "@vitest/coverage-v8": "^1.1.3",
+    "@vitest/ui": "^1.1.3",
     "commitizen": "4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.55.0",

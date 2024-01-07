@@ -1,10 +1,17 @@
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react'
+import path from 'path'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src/'),
+      '@tests': path.resolve(__dirname, './tests'),
+    },
+  },
   server: {
     watch: {
       usePolling: true,
@@ -21,7 +28,7 @@ export default defineConfig({
       provider: 'v8',
       all: true,
       exclude: ['node_modules/*'],
-      include: ['tests/**/*.{spec|test}.{js,jsx,ts,tsx}'],
+      include: ['*.{spec|test}.{js,jsx,ts,tsx}'],
       watermarks: {
         statements: [50, 80],
         functions: [50, 80],
