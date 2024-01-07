@@ -1,4 +1,5 @@
 import { FC, useState } from 'react'
+import { Dropdown, DropdownItem } from '../Dropdown'
 
 interface AutoCompleteProps {
   fetchData: (search: string) => Promise<string[]>
@@ -20,15 +21,13 @@ const AutoComplete: FC<AutoCompleteProps> = ({ fetchData }) => {
   return (
     <div>
       <input role="search" type="text" onChange={handleChange} />
-      <div>
-        <ul>
-          {data.map((item, index) => (
-            <li style={{ top: index * 40 }} key={index}>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Dropdown isOpen={Boolean(data.length)}>
+        {data.map((item, index) => (
+          <DropdownItem style={{ top: index * 40 }} key={index}>
+            {item}
+          </DropdownItem>
+        ))}
+      </Dropdown>
     </div>
   )
 }
