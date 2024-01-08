@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import AutoComplete from './components/AutoComplete'
+import MediaDetail, { MediaDetailProps } from './components/SelectedMedia'
 import Container from './components/theme/Container'
 import Input from './components/theme/Input'
 import Title from './components/theme/Title'
+import { MediaRecord } from './types'
 
 const Form = styled.form`
   width: 100%;
@@ -36,14 +38,6 @@ const APIKeyInput = styled(Input)`
   max-width: 10rem;
 `
 
-type MediaRecord = {
-  Poster: string
-  Title: string
-  Type: string
-  Year: string
-  imdbID: string
-}
-
 const getMoviesByName = async (search: string, apiKey: string) => {
   if (apiKey.length !== 8) return []
 
@@ -56,15 +50,35 @@ const getMoviesByName = async (search: string, apiKey: string) => {
   }
   if (result.Error) return []
 
-  return result.Search?.map(({ Title }) => Title) ?? []
+  return result.Search?.map(({ Title, Type, Year, imdbID, Poster }) => ({
+    title: Title,
+    type: Type,
+    year: Year,
+    id: imdbID,
+    poster: Poster,
+  })) as MediaDetailProps[]
 }
 
 const Showcase = () => {
   const [apiKey, setApiKey] = useState('')
+  const [list, setList] = useState<MediaDetailProps[]>([])
+  const [selected, setSelected] = useState<MediaDetailProps>()
+
+  const fetchData = async (search: string) => {
+    const results = await getMoviesByName(search, apiKey)
+    setSelected(undefined)
+    setList(results)
+    return results.map(({ title }) => title)
+  }
+
+  const handleSelect = (title: string) => {
+    setSelected(list.find((item) => item.title === title))
+  }
+
   return (
     <Container>
       <Title>Take Home Assessment: AutoComplete</Title>
-      <Form>
+      <Form onSubmit={(e) => e.preventDefault()}>
         <FormFirstRow>
           <APIKeyInput
             placeholder="Fill your API key..."
@@ -85,10 +99,12 @@ const Showcase = () => {
         <AutoComplete
           highlight
           placeholder="Search for a movie..."
-          debounceTime={1000}
-          fetchData={(data) => getMoviesByName(data, apiKey)}
+          debounceTime={300}
+          fetchData={fetchData}
+          onItemSelect={handleSelect}
         />
       </Form>
+      {selected && <MediaDetail item={selected} apiKey={apiKey} />}
     </Container>
   )
 }

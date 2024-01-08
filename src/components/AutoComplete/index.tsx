@@ -126,7 +126,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
         onKeyDown={handleKeyDown}
       />
       <Dropdown isOpen={Boolean(data.length)}>
-        {data.map((item, i) => (
+        {data?.map((item, i) => (
           <DropdownItem
             isActive={index === i + 1}
             onHover={() => handleItemHover(i)}
