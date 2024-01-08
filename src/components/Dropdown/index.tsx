@@ -6,35 +6,33 @@ type DropdownProps = {
 } & HTMLAttributes<HTMLDivElement>
 
 const DropdownWrapper = styled.div`
+  width: 100%
   position: absolute;
 `
 
 const DropdownContainer = styled.ul.attrs({ role: 'listbox' })`
   background-color: #fff;
-  border: 1px solid #000;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  top: 100%;
-  width: 100%;
-  z-index: 1;
+  border: 0.1rem solid rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
 `
 
 export const Dropdown: FC<DropdownProps> = ({ children, isOpen, ...rest }) => {
   if (!isOpen) return null
 
   return (
-    <DropdownWrapper {...rest}>
-      <DropdownContainer>{children}</DropdownContainer>
-    </DropdownWrapper>
+    <div style={{ width: '100%' }}>
+      <DropdownWrapper {...rest}>
+        <DropdownContainer>{children}</DropdownContainer>
+      </DropdownWrapper>
+    </div>
   )
 }
 
 export const DropdownItem = styled.li.attrs({ role: 'listitem' })`
-  border-bottom: 1px solid #000;
-  padding: 0.5rem 1rem;
+  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 0;
 
   &:last-child {
     border-bottom: none;
