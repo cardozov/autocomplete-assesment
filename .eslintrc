@@ -19,3 +19,4 @@ rules:
     - warn
     - allowConstantExport: true
   prettier/prettier: error
+  no-fallthrough: off

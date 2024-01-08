@@ -15,7 +15,6 @@ const DropdownContainer = styled.ul.attrs({ role: 'listbox' })`
   border: 0.1rem solid rgba(0, 0, 0, 0.3);
   border-radius: 0.5rem;
   box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.3);
-  padding: 0.5rem 1rem;
 `
 
 export const Dropdown: FC<DropdownProps> = ({ children, isOpen, ...rest }) => {
@@ -30,11 +29,47 @@ export const Dropdown: FC<DropdownProps> = ({ children, isOpen, ...rest }) => {
   )
 }
 
-export const DropdownItem = styled.li.attrs({ role: 'listitem' })`
-  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 0;
+const DropdownItemContainer = styled.li.attrs({ role: 'listitem' })`
+  padding: 0.7rem 1rem 0 1rem;
+  cursor: pointer;
+
+  &:not(:last-child):after {
+    content: '';
+    display: block;
+    border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 0.7rem;
+  }
+
+  &:first-child {
+    padding-top: 1rem;
+  }
 
   &:last-child {
-    border-bottom: none;
+    padding-bottom: 1rem;
   }
 `
+
+const DropdownItemContainerActive = styled(DropdownItemContainer)`
+  background-color: rgba(0, 0, 255, 0.05);
+`
+
+type DropdownItemProps = {
+  isActive?: boolean
+  onHover?: () => void
+} & HTMLAttributes<HTMLLIElement>
+
+export const DropdownItem: FC<DropdownItemProps> = ({
+  children,
+  isActive,
+  onHover,
+  ...rest
+}) => {
+  const Container =
+    isActive ? DropdownItemContainerActive : DropdownItemContainer
+
+  return (
+    <Container onMouseEnter={onHover} {...rest}>
+      {children}
+    </Container>
+  )
+}

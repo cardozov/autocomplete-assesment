@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react'
-import { unitTestSuite } from '@tests/customResources'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, render } from '@testing-library/react'
+import { componentTestSuite, unitTestSuite } from '@tests/customResources'
+import { describe, expect, it, vi } from 'vitest'
 import { Dropdown, DropdownItem } from '.'
 
 describe('Dropdown', () => {
@@ -34,17 +34,46 @@ describe('Dropdown', () => {
         expect(queryByText('test')).toBeNull()
       })
     })
+  })
+})
 
-    describe('DropdownItem', () => {
-      it('should render the component', () => {
-        const { queryByRole } = render(<DropdownItem />)
-        expect(queryByRole('listitem')).not.toBeNull()
-      })
+describe('DropdownItem', () => {
+  unitTestSuite(() => {
+    it('should render the component', () => {
+      const { queryByRole } = render(<DropdownItem />)
+      expect(queryByRole('listitem')).not.toBeNull()
+    })
 
-      it('should render the children', () => {
-        const { queryByText } = render(<DropdownItem>test</DropdownItem>)
-        expect(queryByText('test')).not.toBeNull()
-      })
+    it('should render the children', () => {
+      const { queryByText } = render(<DropdownItem>test</DropdownItem>)
+      expect(queryByText('test')).not.toBeNull()
+    })
+
+    it('should trigger onHover after mouseEnter', () => {
+      const onHover = vi.fn()
+      const mouseEnterMock = new MouseEvent('mouseenter', {})
+      const { getByRole } = render(
+        <DropdownItem onHover={onHover}>test</DropdownItem>
+      )
+      fireEvent.mouseEnter(getByRole('listitem'), mouseEnterMock)
+      expect(onHover).toHaveBeenCalledOnce()
+      expect(onHover.mock.calls[0][0]).toMatchObject({ ...mouseEnterMock })
+    })
+  })
+
+  componentTestSuite(() => {
+    const fn = vi.fn()
+
+    it('should style if active', async () => {
+      const { getByRole } = render(
+        <DropdownItem isActive onHover={fn}>
+          test
+        </DropdownItem>
+      )
+      expect(getComputedStyle(getByRole('listitem'))).toHaveProperty(
+        'background-color',
+        'rgba(0, 0, 255, 0.05)'
+      )
     })
   })
 })
