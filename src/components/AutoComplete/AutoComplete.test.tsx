@@ -22,7 +22,7 @@ describe('AutoComplete', () => {
   unitTestSuite(() => {
     it('should render the component', () => {
       const { queryByRole } = render(<AutoComplete fetchData={fn} />)
-      expect(queryByRole('search')).toBeDefined()
+      expect(queryByRole('search')).not.toBeNull()
     })
 
     describe('Fetch data function', () => {
@@ -57,7 +57,7 @@ describe('AutoComplete', () => {
     it("should show dropdown list when user type 'test'", async () => {
       const { getByRole, queryByText } = render(<AutoComplete fetchData={fn} />)
       await typeOnInput(getByRole('search'), 'test')
-      expect(queryByText('test-0')).toBeDefined()
+      expect(queryByText('test-0')).not.toBeNull()
     })
 
     it('should hide dropdown list when user type cleans the input', async () => {
@@ -67,6 +67,18 @@ describe('AutoComplete', () => {
       await typeOnInput(await findByRole('search'), 'test')
       await typeOnInput(await findByRole('search'), '')
       expect(queryByText('test-0')).toBeNull()
+    })
+
+    it('should highlight searching text', async () => {
+      const { findByRole, container } = render(
+        <AutoComplete
+          highlight
+          fetchData={fn.mockResolvedValue(['some longer text response'])}
+        />
+      )
+      await typeOnInput(await findByRole('search'), 'text')
+      const pattern = /<span>some longer <mark.*>text<\/mark> response<\/span>/g
+      expect(container.innerHTML).toMatch(pattern)
     })
   })
 })
