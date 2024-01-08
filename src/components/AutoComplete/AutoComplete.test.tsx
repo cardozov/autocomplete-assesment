@@ -1,4 +1,4 @@
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { Mock, describe, expect, expectTypeOf, vi } from 'vitest'
 
 import { integrationTestSuite, unitTestSuite } from '@tests/customResources'
@@ -44,6 +44,17 @@ describe('AutoComplete', () => {
         const { getByRole } = render(<AutoComplete fetchData={fn} />)
         await typeOnInput(getByRole('search'), '')
         expect(fn).not.toHaveBeenCalled()
+      })
+
+      it('should call fetchData 1 time if user type each key under 500ms', async () => {
+        const { getByRole } = render(
+          <AutoComplete debounceTime={500} fetchData={fn} />
+        )
+        await typeOnInput(getByRole('search'), 't')
+        await typeOnInput(getByRole('search'), 'te')
+        await typeOnInput(getByRole('search'), 'tes')
+        await typeOnInput(getByRole('search'), 'test')
+        await waitFor(() => expect(fn).toHaveBeenCalledTimes(1))
       })
     })
   })
