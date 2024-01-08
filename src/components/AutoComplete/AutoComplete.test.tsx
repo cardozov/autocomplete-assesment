@@ -57,6 +57,20 @@ describe('AutoComplete', () => {
         await waitFor(() => expect(fn).toHaveBeenCalledTimes(1))
       })
     })
+
+    describe('Placeholder', () => {
+      it('should render the placeholder', () => {
+        const { queryByPlaceholderText } = render(
+          <AutoComplete fetchData={fn} placeholder="test" />
+        )
+        expect(queryByPlaceholderText('test')).not.toBeNull()
+      })
+    })
+
+    it('should not render the placeholder by default', () => {
+      const { queryByPlaceholderText } = render(<AutoComplete fetchData={fn} />)
+      expect(queryByPlaceholderText('test')).toBeNull()
+    })
   })
 
   integrationTestSuite(() => {

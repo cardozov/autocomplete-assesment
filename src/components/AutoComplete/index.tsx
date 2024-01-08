@@ -4,26 +4,24 @@ import { Dropdown, DropdownItem } from '../Dropdown'
 import TextWithSliceHighlight from '../TextWithSliceHighlight'
 import Input from '../theme/Input'
 
-const AutoCompleteInput = styled(Input)`
-  width: 100%;
-`
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 `
 
 type AutoCompleteProps = {
   fetchData: (search: string) => Promise<string[]>
   highlight?: boolean
   debounceTime?: number
+  placeholder?: string
 } & React.HTMLAttributes<HTMLDivElement>
 
 const AutoComplete: FC<AutoCompleteProps> = ({
   fetchData,
   debounceTime = 0,
   highlight = false,
+  placeholder,
   ...rest
 }) => {
   const [search, setSearch] = useState('')
@@ -54,7 +52,12 @@ const AutoComplete: FC<AutoCompleteProps> = ({
 
   return (
     <Wrapper {...rest}>
-      <AutoCompleteInput role="search" type="text" onChange={handleChange} />
+      <Input
+        placeholder={placeholder}
+        role="search"
+        type="text"
+        onChange={handleChange}
+      />
       <Dropdown isOpen={Boolean(data.length)}>
         {data.map((item, index) => (
           <DropdownItem style={{ top: index * 40 }} key={index}>
