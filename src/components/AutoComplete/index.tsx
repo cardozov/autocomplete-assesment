@@ -35,6 +35,13 @@ const AutoComplete: FC<AutoCompleteProps> = ({
 
   const searchData = () => fetchData(search).then(setData)
 
+  const cleanUp = () => {
+    setData([])
+    setIndex(0)
+    setSearch('')
+    if (ref.current) ref.current.value = ''
+  }
+
   useEffect(() => {
     if (!search) return
     if (debounceTime === 0) {
@@ -66,12 +73,12 @@ const AutoComplete: FC<AutoCompleteProps> = ({
       case 'Enter':
         if (data[index - 1]) {
           onItemSelect?.(data[index - 1])
-        } else break
+          cleanUp()
+          ref.current?.blur()
+        }
+        break
       case 'Escape':
-        setData([])
-        setIndex(0)
-        setSearch('')
-        if (ref.current) ref.current.value = ''
+        cleanUp()
         ref.current?.blur()
         break
     }
